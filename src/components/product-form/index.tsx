@@ -2,6 +2,7 @@ import { useCreateProduct, listenToProducts } from "../services";
 import "./style.css";
 import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
+import { useNetworkStatus } from "../hooks/useNetworkStatus";
 
 interface Data {
   id: string;
@@ -15,6 +16,7 @@ const UpdateForm = () => {
   const [quantity, setQuantity] = useState<string>("");
   const [productId, setProductId] = useState<string>("");
   const [data, setData] = useState<Data | null>(null);
+  const isOnline = useNetworkStatus()
 
   const resetFn = () => {
     setAmount("");
@@ -25,6 +27,11 @@ const UpdateForm = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    if(!isOnline){
+      toast.error("You are offline")
+      return
+    }
 
     const payload = {
       id: Date.now(),
@@ -55,6 +62,7 @@ const UpdateForm = () => {
 
 
   const state = data?.id || data?.amount || data?.name || data?.quantity
+
 
   return (
     <>
