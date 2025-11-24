@@ -11,8 +11,6 @@ import toast, {
 
 
 
-
-
 //listening to realtime update on products
 export const listenToProducts = (
   ProductId: string,
