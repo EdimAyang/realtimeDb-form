@@ -16,7 +16,7 @@ const UpdateForm = () => {
   const [quantity, setQuantity] = useState<string>("");
   const [productId, setProductId] = useState<string>("");
   const [data, setData] = useState<Data | null>(null);
-  const isOnline = useNetworkStatus()
+  const isOnline = useNetworkStatus();
 
   const resetFn = () => {
     setAmount("");
@@ -28,9 +28,9 @@ const UpdateForm = () => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if(!isOnline){
-      toast.error("You are offline")
-      return
+    if (!isOnline) {
+      toast.error("You are offline");
+      return;
     }
 
     const payload = {
@@ -60,9 +60,7 @@ const UpdateForm = () => {
     return () => unsubscribe(); // removes listener
   }, [productId]);
 
-
-  const state = data?.id || data?.amount || data?.name || data?.quantity
-
+  const state = data?.id || data?.amount || data?.name || data?.quantity;
 
   return (
     <>
@@ -84,9 +82,7 @@ const UpdateForm = () => {
 
           <button
             style={{ backgroundColor: "red" }}
-            onClick={() =>
-              setData(null)
-            }
+            onClick={() => setData(null)}
           >
             close
           </button>
@@ -110,7 +106,7 @@ const UpdateForm = () => {
             <section>
               <label htmlFor="amount">Amount</label>
               <input
-                type="text"
+                type="number"
                 id="amount"
                 value={amount}
                 placeholder="Enter Amount"
@@ -122,7 +118,7 @@ const UpdateForm = () => {
             <section>
               <label htmlFor="quantity">Quantity</label>
               <input
-                type="text"
+                type="number"
                 id="quantity"
                 value={quantity}
                 placeholder="Enter Quantity"
@@ -131,7 +127,16 @@ const UpdateForm = () => {
               />
             </section>
 
-            <button type="submit" disabled={updateMutation.isPending}>
+            <button
+              type="submit"
+              disabled={updateMutation.isPending}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault(); // optional
+                  handleSubmit(e as unknown as React.FormEvent<HTMLFormElement>);
+                }
+              }}
+            >
               {updateMutation.isPending ? "Loading.." : "Update"}
             </button>
           </form>
